@@ -1,9 +1,11 @@
-package workshopone
+package workshopone;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.*;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class WordCount
 {
@@ -28,7 +30,7 @@ public class WordCount
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         // Set which class does which part
-        job.setMapperClass(wordMapper.class);
+        job.setMapperClass(WordMapper.class);
         job.setReducerClass(SumReducer.class);
 
 
@@ -36,6 +38,9 @@ public class WordCount
         job.setOutputKeyClass(Text.class); // String
         job.setOutputValueClass(IntWritable.class); // Integer
         
+        // Finish if finished
+        boolean success = job.waitForCompletion(true);
+        System.exit(success ? 0 : 1);
 
     }
 }
